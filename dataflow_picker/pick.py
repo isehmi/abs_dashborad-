@@ -64,7 +64,7 @@ df = pd.DataFrame({
 })
 print(df.head())
 
-
+df.to_csv("test_set")
 
 
 
