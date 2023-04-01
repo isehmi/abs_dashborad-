@@ -11,13 +11,17 @@ def get_line(file_name):
     return lines
 
 def make_dataFlow_df():
+    test = 0
     lines = get_line(db.file_dataFlow)
     for line in lines:
         if line.find(db.find_dataFlow)!= -1:
             dataFlow.loc[dataFlow.shape[0]+1, "dataflowId"] = line[line.find(db.parsing_dataflows[2][1])+4:line.find(db.parsing_dataflows[3][1])-2]
             dataFlow.loc[dataFlow.shape[0], "agencyId"] = line[line.find(db.parsing_dataflows[4][1])+10:line.find(db.parsing_dataflows[5][1])-2]
             dataFlow.loc[dataFlow.shape[0], "version"] = line[line.find(db.parsing_dataflows[6][1])+9:line.find(db.parsing_dataflows[7][1])-2]
-    
+        if line.find('<common:Name xml:lang="en">')!= -1:  #adding Name 
+            dataFlow.loc[dataFlow.shape[0], "name"] = line[line.find('<common:Name xml:lang="en">')+27:line.find("</common:Name>")-14]
+        if line.find('<common:Description xml:lang="en">')!= -1: #adding description
+            dataFlow.loc[dataFlow.shape[0], "description"] = line[line.find('<common:Description xml:lang="en">')+34:line.find("</common:Description>")-21]
 
 def positions_data(line):
     dsd.loc[dsd.shape[0]+1, "Position"] = line[line.find(db.dsdKeyword[0])+10:line.find(db.dsdKeyword[2])-2]
@@ -79,7 +83,7 @@ def make_dsd_df():
 
 
 
-dataFlow = pd.DataFrame(columns=["dataflowId", "agencyId", "version"])
+dataFlow = pd.DataFrame(columns=["dataflowId", "agencyId", "version", "name", "description"])
 dsd = pd.DataFrame(columns=["Position", "Position_id", "Name", "Code"])
 
 
@@ -90,8 +94,6 @@ print("------- this is the DataFlow Df ---------")
 print(dataFlow.head())
 print("\n\n-------- this is the DSD DF ---------")
 print(dsd.head())
-
-
 
 
 
