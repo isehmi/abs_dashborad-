@@ -1,7 +1,11 @@
 file_dataFlow = "dataFlow.xml"
 find_dataFlow = "<structure:Dataflow id="
 
+file_dsd = "dataflow_picker\ABS_ALC_children.xml"
+file_dsd = "dataflow_picker\ABS_ACLD_LFSTATUS_test.xml"
+
 file_dsd = "ABS_ALC_children.xml"
+file_dsd = "ABS_ACLD_LFSTATUS_test.xml"
 
 dsdKeyword = ['position="','">',"<structure:Enumeration>", ""]
 
@@ -30,5 +34,22 @@ main_meun_text = "Welcome to the main menu if you would like a full list of comm
 int_error = "you need to enter a number"
 options_error = "this options does not exits type help for a list of commands"
 
+# --------------------------
+#  users interface 
+welcome_message = """Welcome to our data picking program powered by the ABS API! 
 
+With this program, you can easily access the data you need for your research, analysis, or any other purpose. 
 
+If you need any assistance or have any questions, don't hesitate to reach out to i'm always here to help! 
+
+Thank you for trying my program, and i hope you find the data you need."""
+
+welcome_art = """ 
+ \ \        / /  ____| |    / ____/ __ \|  \/  |  ____| 
+  \ \  /\  / /| |__  | |   | |   | |  | | \  / | |__    
+   \ \/  \/ / |  __| | |   | |   | |  | | |\/| |  __|   
+    \  /\  /  | |____| |___| |___| |__| | |  | | |____  
+     \/  \/   |______|______\_____\____/|_|  |_|______
+     """
+
+3

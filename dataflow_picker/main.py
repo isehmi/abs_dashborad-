@@ -17,7 +17,7 @@ def interface():
     loop = True
     print("this is a ABS toolkit made to help find and display data \nthis is a command line base version made for testing")
     while loop:
-        user_input("hello")
+        user_input_log("hello")
         if log.loc[log.shape[0], "command"] == "exit":
             loop = False
         else:
