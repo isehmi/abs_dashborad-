@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
-import data_sorter as db # this is where alot of var live 
-
+import data_engine.data_sorter as db 
+# import data_sorter as db# this is where alot of var live 
 
 def get_line(file_name):
     fp = open(file_name, "r")
@@ -87,16 +87,16 @@ dataFlow = pd.DataFrame(columns=["dataflowId", "agencyId", "version", "name", "d
 dsd = pd.DataFrame(columns=["Position", "Position_id", "Name", "Code"])
 
 
-make_dataFlow_df()
-make_dsd_df()
-
-print("------- this is the DataFlow Df ---------")
-print(dataFlow.head())
-print("\n\n-------- this is the DSD DF ---------")
-print(dsd.head())
 
 
+if __name__ == '__main__':
 
+    make_dataFlow_df()
+    make_dsd_df()
+    print("------- this is the DataFlow Df ---------")
+    print(dataFlow.head())
+    print("\n\n-------- this is the DSD DF ---------")
+    print(dsd.head())
 
 
 

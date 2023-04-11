@@ -1,11 +1,11 @@
-file_dataFlow = "dataFlow.xml"
+file_dataFlow = "data\\xml_files\\dataFlow.xml"
 find_dataFlow = "<structure:Dataflow id="
 
-file_dsd = "dataflow_picker\ABS_ALC_children.xml"
-file_dsd = "dataflow_picker\ABS_ACLD_LFSTATUS_test.xml"
+file_dsd = "data\\xml_files\\ABS_ALC_children.xml"
+file_dsd = "data\\xml_files\\ABS_ACLD_LFSTATUS_test.xml"
 
-file_dsd = "ABS_ALC_children.xml"
-file_dsd = "ABS_ACLD_LFSTATUS_test.xml"
+file_dsd = "data\\xml_files\\ABS_ALC_children.xml"
+file_dsd = "data\\xml_files\\ABS_ACLD_LFSTATUS_test.xml"
 
 dsdKeyword = ['position="','">',"<structure:Enumeration>", ""]
 
@@ -13,7 +13,7 @@ dsdKeyword = ['position="','">',"<structure:Enumeration>", ""]
 # that are used in the same file will be keeped in the same list
 
 parsing_dataflows = [
-    ["this is the file name for dataflow", "dataFlow.xml"],
+    ["this is the file name for dataflow", "data\\xml_files\\dataFlow.xml"],
     ["this is the keyword we use to get the lines with ID information", "<structure:Dataflow id="],
     ["this is the starting keystring for parsing the ID out of line", "id=" ],
     ["this is the ending keystring for parsing the ID out of line", "agencyID" ],
@@ -22,6 +22,13 @@ parsing_dataflows = [
     ["this is the starting keystring for parsing the version out of line", "version" ],
     ["this is the ending keystring for parsing the version out of line", "isFinal" ],
 ]
+
+# need to move data from pcik.py for dsd to here 
+# parsing_dsd = [
+
+# ]
+
+
 
 
 
