@@ -25,8 +25,8 @@ df =  data.medals_long()
 
 # ------------------------
 
-
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP],
+# BOOTSTRAP
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.DARKLY],
                 meta_tags=[{'name': 'viewport',
                             'content': 'width=device-width, initial-scale=1.0'}]
                 )
@@ -59,9 +59,29 @@ app.layout = dbc.Container([
                 data=dataFlow_table_data.to_dict('records'),
                 columns=[{'id':c, 'name': c}for c in dataFlow_table_data.columns],
                 page_action='none',
-                style_table={'height': '800px', 'overflowY': 'auto'},
-                style_cell={'textAlign': 'left'},
-                tooltip_duration=None,
+                style_table={'height': '800px', 'width': '100%',  'overflowY': 'auto', 'overflow-wrap': 'break-word'},
+                style_cell={'textAlign': 'left', 'max-height': '30px', 'min-height': '30px', 'height': '30px', 'max-width': '150px'},
+                style_header={'backgroundColor': 'rgb(30, 30, 30)',
+                               'color': 'white'},
+                style_data={'backgroundColor': 'rgb(50, 50, 50)',
+                    'color': 'white'},
+                css=[{
+                    'selector': '.dash-table-tooltip',
+                    'rule': 'background-color: black;'
+                     }],
+                style_cell_conditional=[
+                    {'if': {'column_id':'dataflowId'},
+                     'width': '15%'}
+                ],
+                tooltip_data=[
+                    {
+                        column: {'value': str(value), 'type': 'markdown'}
+                        for column, value in row.items()
+                    } for row in dataFlow_table_data.to_dict('records')
+                ],
+                tooltip_duration=None
+
+                
             )
         )
     ])
@@ -72,4 +92,4 @@ app.layout = dbc.Container([
 # if __name__=='__main__':
 app.run_server(debug=True, port=3000)
 
-    
+
