@@ -5,7 +5,7 @@ file_dsd = "data\\xml_files\\ABS_ALC_children.xml"
 file_dsd = "data\\xml_files\\ABS_ACLD_LFSTATUS_test.xml"
 
 file_dsd = "data\\xml_files\\ABS_ALC_children.xml"
-file_dsd = "data\\xml_files\\ABS_ACLD_LFSTATUS_test.xml"
+# file_dsd = "data\\xml_files\\ABS_ACLD_LFSTATUS_test.xml"
 
 dsdKeyword = ['position="','">',"<structure:Enumeration>", ""]
 

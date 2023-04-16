@@ -25,8 +25,8 @@ df =  data.medals_long()
 
 # ------------------------
 
-# BOOTSTRAP
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.DARKLY],
+# BOOTSTRAP, if i want dark mode use DARKLY but this is wip
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP],
                 meta_tags=[{'name': 'viewport',
                             'content': 'width=device-width, initial-scale=1.0'}]
                 )
@@ -51,7 +51,9 @@ app.layout = dbc.Container([
                          placeholder="you can use the full name or data flow ID to search",
                          options=[{'label': name, 'value': dataflowId}
                                   for name, dataflowId in dataFlow_search[["name", "dataflowId"]].to_records(index=False)],
-                                    value=dataFlow_search["dataflowId"].iloc[0]))
+                                    value=dataFlow_search["dataflowId"].iloc[0]
+                            ),
+                    )
     ),
     dbc.Row([ # this will be the table
         dbc.Col(
@@ -80,16 +82,14 @@ app.layout = dbc.Container([
                     } for row in dataFlow_table_data.to_dict('records')
                 ],
                 tooltip_duration=None
-
-                
             )
         )
     ])
-
 ])
 
-
-# if __name__=='__main__':
-app.run_server(debug=True, port=3000)
-
-
+@app.callback(
+    Output('dataFlow_search_dropdown', 'value'),
+    Input('dataFlow_search_dropdown', 'value')
+)
+def submit_dropdown(value):
+    print("------Submint----------\n"+ value)

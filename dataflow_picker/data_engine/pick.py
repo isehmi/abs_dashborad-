@@ -71,8 +71,8 @@ def section(lines):
     return section    
 
 
-def make_dsd_df():
-    lines = get_line(db.file_dsd)
+def make_dsd_df(file_name = db.file_dsd):
+    lines = get_line(file_name)
     
     for i, line in enumerate(lines):
         if line.find(db.dsdKeyword[0]) != -1: # this is looking for all the lines with positions in it 

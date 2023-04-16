@@ -3,14 +3,16 @@ from datetime import datetime
 import data_engine.pick as pick
 import display.menu as menu 
 import display.display as web 
+import display.dsd_table as dsd_table
 
 # testing pcik 
-key = False
-if key:
-    pick.make_dataFlow_df()
-    pick.make_dsd_df()
-    print(pick.dataFlow)
-    print(pick.dsd)
 
 
 
+# testing the web app 
+
+# if __name__=='__main__':
+#     web.app.run_server(debug=True, port=3000)
+
+if __name__=='__main__':
+    dsd_table.app.run_server(debug=True, port=3000)
