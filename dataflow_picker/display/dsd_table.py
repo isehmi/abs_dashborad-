@@ -10,10 +10,6 @@ import pandas as pd
 import data_engine.pick as pick
 
 
-# print("this is the first time i print dsd df ")
-# print(pick.dsd)
-# dsd = pick.dsd
-
 # ----- formnat dsd table and dropdown -------#
 pick.make_dsd_df()
 dsd_dropDown_data = 'position ' + pick.dsd['Position'].astype(str)
