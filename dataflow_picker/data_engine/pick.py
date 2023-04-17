@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 import data_engine.data_sorter as db 
-# import data_sorter as db# this is where alot of var live 
 
 def get_line(file_name):
     fp = open(file_name, "r")
@@ -11,7 +10,6 @@ def get_line(file_name):
     return lines
 
 def make_dataFlow_df():
-    test = 0
     lines = get_line(db.file_dataFlow)
     for line in lines:
         if line.find(db.find_dataFlow)!= -1:
@@ -20,7 +18,7 @@ def make_dataFlow_df():
             dataFlow.loc[dataFlow.shape[0], "version"] = line[line.find(db.parsing_dataflows[6][1])+9:line.find(db.parsing_dataflows[7][1])-2]
         if line.find('<common:Name xml:lang="en">')!= -1:  #adding Name 
             dataFlow.loc[dataFlow.shape[0], "name"] = line[line.find('<common:Name xml:lang="en">')+27:line.find("</common:Name>")-14]
-        if line.find('<common:Description xml:lang="en">')!= -1: #adding description
+        if line.find('<common:Description xml:lang="en">')!= -1:  
             dataFlow.loc[dataFlow.shape[0], "description"] = line[line.find('<common:Description xml:lang="en">')+34:line.find("</common:Description>")-21]
 
 def positions_data(line):
@@ -83,6 +81,19 @@ def make_dsd_df(file_name = db.file_dsd):
 
 
 
+def make_data_df(file_name):
+    lines = get_line(file_name)
+    for line in lines:
+        if line.find("<generic:ObsDimension id=") != -1:
+            data.loc[data.shape[0], 'time_period'] = line[line.find('value="')+7:line.find("/>")-1]
+        elif line.find("<generic:ObsValue value=") != -1:
+            print(line[line.find('value="')+7:line.find("/>")-1])
+            data.loc[data.shape[0]-1, 'data'] = line[line.find('value="')+7:line.find("/>")-1]
+    print(data)
+
+
+
+data = pd.DataFrame(columns=['data', 'time_period'])
 dataFlow = pd.DataFrame(columns=["dataflowId", "agencyId", "version", "name", "description"])
 dsd = pd.DataFrame(columns=["Position", "Position_id", "Name", "Code"])
 
@@ -93,10 +104,17 @@ if __name__ == '__main__':
 
     make_dataFlow_df()
     make_dsd_df()
+    make_data_df(db.alc_data)
+    print(data)
+
     print("------- this is the DataFlow Df ---------")
     print(dataFlow.head())
     print("\n\n-------- this is the DSD DF ---------")
     print(dsd.head())
+    print("\n\n-------- this is the Data DF ---------")
+    print(data.head())
+
+
 
 
 

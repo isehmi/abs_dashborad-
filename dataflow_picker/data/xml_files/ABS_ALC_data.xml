@@ -1,0 +1,94 @@
+This XML file does not appear to have any style information associated with it. The document tree is shown below.
+<!-- NSI Web Service v8.8.0.0 -->
+<message:GenericData xmlns:footer="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message/footer" xmlns:generic="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/generic" xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<message:Header>
+<message:ID>IREF002209</message:ID>
+<message:Test>false</message:Test>
+<message:Prepared>2023-04-17T09:12:11</message:Prepared>
+<message:Sender id="_Stat_V8"/>
+<message:Structure structureID="ABS_ALC_1_0_0" dimensionAtObservation="TIME_PERIOD">
+<common:StructureUsage>
+<Ref agencyID="ABS" id="ALC" version="1.0.0"/>
+</common:StructureUsage>
+</message:Structure>
+<message:DataSetAction>Information</message:DataSetAction>
+<message:DataSetID>ALC</message:DataSetID>
+</message:Header>
+<message:DataSet action="Information" structureRef="ABS_ALC_1_0_0">
+<generic:Attributes>
+<generic:Value id="UNIT_MEASURE" value="L"/>
+</generic:Attributes>
+<generic:Series>
+<generic:SeriesKey>
+<generic:Value id="TYP" value="1"/>
+<generic:Value id="MEA" value="1"/>
+<generic:Value id="BEVT" value="1"/>
+<generic:Value id="SUB" value="1"/>
+<generic:Value id="FREQUENCY" value="A"/>
+</generic:SeriesKey>
+<generic:Attributes>
+<generic:Value id="UNIT_MULT" value="3"/>
+</generic:Attributes>
+<generic:Obs>
+<generic:ObsDimension id="TIME_PERIOD" value="1985"/>
+<generic:ObsValue value="4832"/>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension id="TIME_PERIOD" value="1986"/>
+<generic:ObsValue value="4825"/>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension id="TIME_PERIOD" value="1987"/>
+<generic:ObsValue value="4440"/>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension id="TIME_PERIOD" value="1988"/>
+<generic:ObsValue value="4766"/>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension id="TIME_PERIOD" value="1989"/>
+<generic:ObsValue value="6566"/>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension id="TIME_PERIOD" value="1990"/>
+<generic:ObsValue value="9046"/>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension id="TIME_PERIOD" value="1991"/>
+<generic:ObsValue value="9665"/>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension id="TIME_PERIOD" value="1992"/>
+<generic:ObsValue value="11241"/>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension id="TIME_PERIOD" value="1993"/>
+<generic:ObsValue value="12523"/>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension id="TIME_PERIOD" value="1994"/>
+<generic:ObsValue value="11927"/>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension id="TIME_PERIOD" value="1995"/>
+<generic:ObsValue value="11859"/>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension id="TIME_PERIOD" value="1996"/>
+<generic:ObsValue value="12597"/>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension id="TIME_PERIOD" value="1997"/>
+<generic:ObsValue value="13687"/>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension id="TIME_PERIOD" value="1998"/>
+<generic:ObsValue value="14261"/>
+</generic:Obs>
+<generic:Obs>
+<generic:ObsDimension id="TIME_PERIOD" value="1999"/>
+<generic:ObsValue value="14373"/>
+</generic:Obs>
+</generic:Series>
+</message:DataSet>
+</message:GenericData>
