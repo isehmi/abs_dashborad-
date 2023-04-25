@@ -1,120 +1,116 @@
-import pandas as pd
-import numpy as np
+import pandas as pd 
+import numpy as np 
 import data_engine.data_sorter as db 
+import xml.etree.ElementTree as ET
+import requests
+from io import BytesIO
+import os.path as os 
 
-def get_line(file_name):
-    fp = open(file_name, "r")
-    with open(file_name, "r"):
-        lines = fp.readlines()
-    fp.close()
-    return lines
+files = {
+    "dataflow_file.xml" : "data\\working_dir\\dataflow_file.xml",
+    'dsd_file.xml' : "data\\working_dir\\dsd_file.xml",
+    "data_file.xml" : "data\\working_dir\\data.xml"
+}
 
-def make_dataFlow_df():
-    lines = get_line(db.file_dataFlow)
-    for line in lines:
-        if line.find(db.find_dataFlow)!= -1:
-            dataFlow.loc[dataFlow.shape[0]+1, "dataflowId"] = line[line.find(db.parsing_dataflows[2][1])+4:line.find(db.parsing_dataflows[3][1])-2]
-            dataFlow.loc[dataFlow.shape[0], "agencyId"] = line[line.find(db.parsing_dataflows[4][1])+10:line.find(db.parsing_dataflows[5][1])-2]
-            dataFlow.loc[dataFlow.shape[0], "version"] = line[line.find(db.parsing_dataflows[6][1])+9:line.find(db.parsing_dataflows[7][1])-2]
-        if line.find('<common:Name xml:lang="en">')!= -1:  #adding Name 
-            dataFlow.loc[dataFlow.shape[0], "name"] = line[line.find('<common:Name xml:lang="en">')+27:line.find("</common:Name>")-14]
-        if line.find('<common:Description xml:lang="en">')!= -1:  
-            dataFlow.loc[dataFlow.shape[0], "description"] = line[line.find('<common:Description xml:lang="en">')+34:line.find("</common:Description>")-21]
+dsd_url = 'https://api.data.abs.gov.au/datastructure/ABS/ALC?references=children'
+dataflow_url = 'https://api.data.abs.gov.au/dataflow'
+data_url = 'https://api.data.abs.gov.au/data/ALC/1.2.1.4.A.'
+ns = [
+    '{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message}',
+    '{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}',
+    '{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common}'
+]
 
-def positions_data(line):
-    dsd.loc[dsd.shape[0]+1, "Position"] = line[line.find(db.dsdKeyword[0])+10:line.find(db.dsdKeyword[2])-2]
-    
-def id_data(lines, i):
-    line_temp = lines[i+1]
-    if pd.isna(dsd["Position_id"].loc[dsd.shape[0]]):
-        dsd["Position_id"].loc[dsd.shape[0]] = line_temp[line_temp.find('<Ref id="')+9:line_temp.find(' version')-1]
-        name_data(section(lines), lines)
-        code_data(section(lines),lines)
+
+def api_call(url, file_name):
+    file_name = 'data\\working_dir\\' + file_name 
+    try:
+        r = requests.get(url)
+        r.raise_for_status()
+
+        root = ET.parse(BytesIO(r.content))
+        with open(file_name, 'wb') as f:
+            root.write(f)
+        
+        if root:
+            return root
+        else:
+            print("their has been an error in the api call")
+    except requests.exceptions.HTTPError as errh:
+        print(f"HTTP error: {errh}")
+    except requests.exceptions.ConnectionError as errc:
+        print(f"Connection error: {errc}")
+    except requests.exceptions.Timeout as errt:
+        print(f"Timeout error: {errt}")
+    except requests.exceptions.RequestException as err:
+        print(f"Request error: {err}")
+
+
+def open_local_file(file_name):
+    print(file_name)
+    root = ET.parse(file_name)
+    return root
+
+def get_xml(file_name):
+    file = files[file_name]
+    if os.isfile(file):
+        print('the file is here opening now')
+        return open_local_file(file)
     else:
-        old_cell =  dsd["Position_id"].loc[dsd.shape[0]]
-        new_data = line_temp[line_temp.find('<Ref id="')+9:line_temp.find(' version')-1]
-        new_cell = old_cell + "," + new_data
-        dsd["Position_id"].loc[dsd.shape[0]] = new_cell
-    
+        print('calling api')
 
-def name_data(section, lines):
-    items = []
-
-    for line in lines[section[0]:section[1]]:
-        if line.find('<common:Name xml:lang="en">') != -1:
-            items.append(line[line.find('<common:Name xml:lang="en">')+27:line.find('/common:Name')-1])
-    dsd.loc[dsd.shape[0], 'Name'] = items
+        return api_call(get_url(), file_name)
 
 
-def code_data(section, lines):
-    items = []
-    for line in lines[section[0]:section[1]]:
-        if line.find('<structure:Code id="') != -1:
-            items.append(line[line.find('<structure:Code id="')+20:line.find('">')])
-    dsd.loc[dsd.shape[0], 'Code'] = items
+def get_url():
+    # this is a WIP it will link to the webapp and get the url that is needed
+    return dsd_url
+
+def paeseDataflow():
+    root = get_xml("dataflow_file.xml")
+    for name in root.iter("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common}Name"):
+        dataFlow.loc[dataFlow.shape[0], "name"] = name.text
+    for index, metadata in enumerate(root.iter("Ref")):
+        dataFlow.loc[index, 'dataflowId'] = metadata.attrib['id']
+        dataFlow.loc[index, 'agencyId'] = metadata.attrib['agencyID']
+        dataFlow.loc[index, 'version'] = metadata.attrib['version']
+    for index, description in enumerate(root.iter("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common}Description")):
+        dataFlow.loc[index, 'description'] = description.text
 
 
-def section(lines):
-    keyword_start = '<structure:Codelist id="' + dsd.loc[dsd.shape[0], "Position_id"]
-    keyword_end = '</structure:Codelist>'
-    section = []
-    key = False
-    for i, line in enumerate(lines):
-        if line.find(keyword_start) != -1 and key == False:
-            section.append(i)
-            key = True
-        elif line.find(keyword_end) != -1 and key:
-            section.append(i)
-            key = False
-    return section    
+def get_name(section, root, index):
+    key = section[1][0][0].attrib['id']
+    title_for_position = root.find('{0}Structures/{1}Codelists/{1}Codelist[@id="{3}"]/{2}Name'.format(ns[0], ns[1], ns[2], key))
+    names = [title_for_position.text]
+
+    values_for_name = root.findall('{0}Structures/{1}Codelists/{1}Codelist[@id="{3}"]/{1}Code/{2}Name'.format(ns[0], ns[1], ns[2], key))
+    for name in values_for_name:
+        names.append(name.text)
+    dsd.loc[index, 'Name'] = names
+
+    Code = root.findall('{0}Structures/{1}Codelists/{1}Codelist[@id="{3}"]/{1}Code'.format(ns[0], ns[1], ns[2], key))
+    code = []
+    for i in Code:
+        code.append(i.attrib['id'])
+    dsd.loc[index, 'Code'] = code
 
 
-def make_dsd_df(file_name = db.file_dsd):
-    lines = get_line(file_name)
-    
-    for i, line in enumerate(lines):
-        if line.find(db.dsdKeyword[0]) != -1: # this is looking for all the lines with positions in it 
-            positions_data(line)
-        elif line.find(db.dsdKeyword[2]) != -1: # this is looking for all the lines with the ids 
-            id_data(lines, i)
-            section(lines)
-
-
-
-def make_data_df(file_name):
-    lines = get_line(file_name)
-    for line in lines:
-        if line.find("<generic:ObsDimension id=") != -1:
-            data.loc[data.shape[0], 'time_period'] = line[line.find('value="')+7:line.find("/>")-1]
-        elif line.find("<generic:ObsValue value=") != -1:
-            print(line[line.find('value="')+7:line.find("/>")-1])
-            data.loc[data.shape[0]-1, 'data'] = line[line.find('value="')+7:line.find("/>")-1]
-    print(data)
-
+def get_dsd_df():
+    root = get_xml('dsd_file.xml')
+    count = 0
+    for i in root.iter("{http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure}Dimension"):
+        if i.attrib:
+            dsd.loc[dsd.shape[0], "Position"] = i.attrib["position"]
+            get_name(i, root, count)
+            dsd.loc[dsd.shape[0] - 1, 'Position_id'] = i.attrib['id']
+            count = count + 1
 
 
 data = pd.DataFrame(columns=['data', 'time_period'])
 dataFlow = pd.DataFrame(columns=["dataflowId", "agencyId", "version", "name", "description"])
 dsd = pd.DataFrame(columns=["Position", "Position_id", "Name", "Code"])
 
-
-
-
-if __name__ == '__main__':
-
-    make_dataFlow_df()
-    make_dsd_df()
-    make_data_df(db.alc_data)
-    print(data)
-
-    print("------- this is the DataFlow Df ---------")
-    print(dataFlow.head())
-    print("\n\n-------- this is the DSD DF ---------")
-    print(dsd.head())
-    print("\n\n-------- this is the Data DF ---------")
-    print(data.head())
-
-
-
-
-
+paeseDataflow()
+print(dataFlow)
+get_dsd_df()
+print(dsd)
